@@ -44,19 +44,19 @@ Design 1: Scrolling (multi-page)
 
 This design contains the main map at the top of the page, followed by detailed information a little further down the page. The information blocks would contain links to full pages with the relevant information.
 
-![Design 1: Scrolling (multi-page)](mockup1.png)
+![Design 1: Scrolling (multi-page)](mockup1.png?raw=true)
 
 Design 2: Panels (multi-page)
 
 This design contains the main map as the bulk of the page, with detailed information available in panels that slide in and out from the edge of the screen. These panels would contain links to full pages with the relevant information.
 
-![Design 2: Panels (multi-page)](mockup2.png)
+![Design 2: Panels (multi-page)](mockup2.png?raw=true)
 
 Design 3: Tabbed (single-page)
 
 This design contains tabs with the main map and each of the detailed information pages. Since the detailed information takes up the entire screen when tabbed to, there would not be separate pages.
 
-![Design 3: Tabbed (single-page)](mockup3.png)
+![Design 3: Tabbed (single-page)](mockup3.png?raw=true)
 
 #### 2. Make a list of 3 pros and 3 cons for each design.
 
@@ -91,7 +91,7 @@ Design 3:
 
 Design 2: Turns out random doodles take less time than pixel art. The real version is theoretically pixel art, and/or due for a name change.
 
-![Illustrated Mock Up](mockup.png)
+![Illustrated Mock Up](mockup.png?raw=true)
 
 ***
 
