@@ -1,0 +1,92 @@
+@import url('main.css');
+
+.footer {
+	position: fixed;
+	width: 100%;
+}
+#map-canvas {
+	height: 100%;
+}
+.stats {
+	position: fixed;
+	top: 15%;
+	left: -210px;
+	z-index: 3;
+	width: 260px;
+	height: 70%;
+	background-color: #ffffff;
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
+	box-shadow: 10px 10px 5px rgba(0,0,0,0.5);
+}
+.stats-open {
+	left: -10px;
+}
+.stats .wrapper {
+	margin: 10px 10px 10px 20px;
+}
+.stats-title {
+	position: relative;
+	left: 200px;
+	width: 20px;
+	height: 250px;
+	padding-left: 10px;
+	font-size: 150%;
+	background-image: url('stats-title.png');
+	background-repeat: no-repeat;
+	background-position: 0px 35px;
+}
+.achieve {
+	position: fixed;
+	top: 15%;
+	right: -210px;
+	z-index: 3;
+	width: 260px;
+	height: 70%;
+	background-color: #ffffff;
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	box-shadow: -10px 10px 5px rgba(0,0,0,0.5);
+}
+.achieve-open {
+	right: -10px;
+}
+.achieve .wrapper {
+	margin: 10px 20px 10px 10px;
+}
+.achieve-title {
+	position: relative;
+	left: 0px;
+	width: 20px;
+	height: 250px;
+	padding-left: 10px;
+	font-size: 150%;
+	background-image: url('achieve-title.png');
+	background-repeat: no-repeat;
+	background-position: 0px 35px;
+}
+.mayr {
+	position: fixed;
+	bottom: 40px;
+	width: 50%;
+	left: 25%;
+	z-index: 3;
+}
+.mayr img {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+}
+.mayr-talk {
+	display: inline-block;
+	position: absolute;
+	bottom: 20px;
+	width: 100%;
+	height: 60px;
+}
+.mayr-talk span {
+	display: block;
+	padding: 10px;
+	margin-right: 50px;
+	text-align: center;
+}

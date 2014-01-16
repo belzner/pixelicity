@@ -2,7 +2,7 @@
 <html>
 	<head>
 		{% load staticfiles %}
-		<link rel="stylesheet" type="text/css" href="{% static "main.css" %}" />
+		<link rel="stylesheet" type="text/css" href="{% static "index.css" %}" />
 		<script type="text/javascript" src="{% static "jquery-1.10.2.js" %}"></script>
 		<script type="text/javascript" src="{% static "jquery.plugins.js" %}"></script>
 		<script type="text/javascript" src="{% static "jquery-ui-1.10.3.custom.js" %}"></script>
@@ -31,12 +31,12 @@
 		</script>
 	</head>
 	<body>
-		<div class="header">
+		<div class="short-block header">
 			<span class="title">Pixelicity</span>
 			<span class="menu"><ul>
-				<li>Home</li>
-				<li>About</li>
-				<li>Visit</li>
+				<li><a href="{% url 'index' %}">Home</a></li>
+				<li><a href="{% url 'about' %}">About</a></li>
+				<li><a href="#">Visit</a></li>
 			</ul></span>
 			<span class="login">Login</span>
 		</div>
@@ -47,7 +47,7 @@
 			<div class="wrapper"><div class="achieve-title">&lt;</div></div>
 		</div>
 		<div id="map-canvas"></div>
-		<div id="mayr"><div id="mayr-talk"><span>Mayr says: Welcome to Pixelicity! Why don't you check out our "About" page?</span></div><img src="{% static "mayr-small.png" %}" /></div>
-		<div class="footer"></div>
+		<div class="mayr"><div class="mayr-box mayr-talk"><span>Mayr says: Welcome to Pixelicity! Why don't you check out our "<a href="{% url 'about' %}">About</a>" page?</span></div><img src="{% static "mayr-small.png" %}" /></div>
+		<div class="short-block footer"></div>
 	</body>
 </html>
