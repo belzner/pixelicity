@@ -115,3 +115,31 @@ body {
 	position: absolute;
 	right: 30px;
 }
+#mayr {
+	position: fixed;
+	bottom: 40px;
+	width: 50%;
+	left: 25%;
+	z-index: 3;
+}
+#mayr img {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+}
+#mayr-talk {
+	display: inline-block;
+	position: absolute;
+	bottom: 20px;
+	width: 100%;
+	height: 60px;
+	background-color: #ffffff;
+	border-radius: 15px;
+	box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+#mayr-talk span {
+	display: block;
+	padding: 10px;
+	margin-right: 50px;
+	text-align: center;
+}
