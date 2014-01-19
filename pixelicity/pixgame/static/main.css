@@ -51,7 +51,7 @@ body {
 	padding-right: 1%;
 	text-align: center;
 }
-.login {
+.greeting {
 	position: absolute;
 	right: 30px;
 }
@@ -79,4 +79,19 @@ a:hover {
 	background-color: #ffffff;
 	border-radius: 15px;
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+.login-box {
+	width: 40%;
+	padding: 40px 10px 70px 10px;
+	position: absolute;
+	top: 100px;
+	left: 30%;
+	background-color: #ffffff;
+	z-index: 5;
+	text-align: center;
+	border-radius: 15px;
+	box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+.hidden {
+	display: none;
 }

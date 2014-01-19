@@ -19,6 +19,7 @@
 			}
 			google.maps.event.addDomListener(window, 'load', initialize);
 			$(document).ready(function() {
+				$(".login-box").hide();
 				$(".stats").click(function() {
 					$(this).toggleClass("stats-open", 500);
 					$(".stats-title").toggleHTML("&lt;", "&gt;");
@@ -26,6 +27,9 @@
 				$(".achieve").click(function() {
 					$(this).toggleClass("achieve-open", 500);
 					$(".achieve-title").toggleHTML("&lt;", "&gt;");
+				});
+				$(".login").click(function() {
+					$(".login-box").fadeToggle();
 				});
 			});
 		</script>
@@ -38,8 +42,19 @@
 				<li><a href="{% url 'about' %}">About</a></li>
 				<li><a href="#">Visit</a></li>
 			</ul></span>
-			<span class="login">Login</span>
+			<span class="greeting">{% if user.is_authenticated %}Hello, {{ name }} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a>{% endif %}</span>
 		</div>
+		{% if not user.is_authenticated %}
+		<div class="login-box">
+			<h1>Log In</h1>
+			<form action="{% url 'login' %}" method="post">
+				{% csrf_token %}
+				Username: <input type="text" name="username" /><br /><br />
+				Password: <input type="password" name="password" /><br /><br />
+				<input type="submit" value="Log in" />
+			</form>
+		</div>
+		{% endif %}
 		<div class="stats">
 			<div class="wrapper"><div class="stats-title">&gt;</div></div>
 		</div>
