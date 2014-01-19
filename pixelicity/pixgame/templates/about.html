@@ -21,8 +21,14 @@
 			google.maps.event.addDomListener(window, 'load', initialize);
 			$(document).ready(function() {
 				$(".login-box").hide();
+				$(".reg-box").hide();
 				$(".login").click(function() {
 					$(".login-box").fadeToggle();
+					$(".reg-box").hide();
+				});
+				$(".reg").click(function() {
+					$(".reg-box").fadeToggle();
+					$(".login-box").hide();
 				});
 			});
 		</script>
@@ -37,7 +43,7 @@
 				<li><a href="{% url 'about' %}">About</a></li>
 				<li><a href="#">Visit</a></li>
 			</ul></span>
-			<span class="greeting">{% if user.is_authenticated %}Hello, {{ name }} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a>{% endif %}</span>
+			<span class="greeting">{% if user.is_authenticated %}Hello, {{ name }} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a> | <a class="reg">Register</a>{% endif %}</span>
 		</div>
 		{% if not user.is_authenticated %}
 		<div class="login-box">
@@ -47,6 +53,17 @@
 				Username: <input type="text" name="username" /><br /><br />
 				Password: <input type="password" name="password" /><br /><br />
 				<input type="submit" value="Log in" />
+			</form>
+		</div>
+		<div class="reg-box">
+			<h1>Register</h1>
+			<form action="{% url 'register' %}" method="post">
+				{% csrf_token %}
+				Username: <input type="text" name="username" /><br /><br />
+				Password: <input type="password" name="password" /><br /><br />
+				Email Address: <input type="text" name="email" /><br /><br />
+				Name: <input type="text" name="first" /> <input type="text" name="last" /><br /><br />
+				<input type="submit" value="Register" />
 			</form>
 		</div>
 		{% endif %}

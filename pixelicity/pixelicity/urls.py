@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     url(r'^admin', include(admin.site.urls)),
     url(r'^login', views.userlogin, name='login'),
     url(r'^logout', views.userlogout, name='logout'),
+    url(r'^register', views.userreg, name='register'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
