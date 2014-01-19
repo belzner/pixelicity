@@ -1,5 +1,8 @@
 @import url('main.css');
 
+body {
+	background-color: #f0ede7;
+}
 .footer {
 	position: relative;
 }
@@ -45,15 +48,10 @@
 }
 .one img {
 	position: absolute;
-	top: 480px;
+	bottom: -50px;
 	right: 10%;
 }
 .info {
-	display: inline-block;
-	position: relative;
-	width: 25%;
-	height: 200px;
-	margin: 20px;
 	text-align: justify;
 }
 .info h2 {
@@ -62,11 +60,6 @@
 	margin: 5px;
 	padding: 0px;
 }
-.info:first-child {
-	float: left;
-	margin-left: 5%;
-}
-.info:last-child {
-	float: right;
-	margin-right: 5%;
+.wrapper {
+	padding: 0 15px;
 }

@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Karla:400,700);
+@import url('bootstrap-css/bootstrap.css');
 
 html {
 	height: 100%;
@@ -72,6 +73,7 @@ a:hover {
 .center {
 	display: block;
 	text-align: center;
+	margin: 0 auto;
 }
 .mayr-box {
 	background-color: #ffffff;
