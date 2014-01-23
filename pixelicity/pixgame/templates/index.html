@@ -119,7 +119,7 @@
 				{% csrf_token %}
 				Username: <input type="text" name="username" /><br /><br />
 				Password: <input type="password" name="password" /><br /><br />
-				<input type="submit" value="Log in" />
+				<button type="submit" value="Log in" class="btn btn-success">Log in</button>
 			</form>
 		</div>
 		<div class="reg-box">
@@ -130,7 +130,7 @@
 				Password: <input type="password" name="password" /><br /><br />
 				Email Address: <input type="text" name="email" /><br /><br />
 				Name: <input type="text" name="first" /> <input type="text" name="last" /><br /><br />
-				<input type="submit" value="Register" />
+				<button type="submit" value="Register" class="btn btn-success">Register</button>
 			</form>
 		</div>
 		{% endif %}
@@ -141,7 +141,13 @@
 			<div class="wrapper"><div class="achieve-title">&lt;</div></div>
 		</div>
 		<div id="map-canvas"></div>
-		<div class="mayr"><div class="mayr-box mayr-talk"><span>Mayr says: Welcome to Pixelicity! Why don't you check out our <a href="{% url 'about' %}">about</a> page for more information?</span></div><img src="{% static "mayr-small.png" %}" /></div>
+		<div class="mayr"><div class="mayr-box mayr-talk"><span>Mayr says:
+			{% if user.is_authenticated %}
+				Hello again, {{ name }}! Found any nice building sites for me lately? I'm waiting!
+			{% else %}
+				Welcome to Pixelicity! Why don't you check out our <a href=\"{% url 'about' %}\">about</a> page for more information?
+			{% endif %}
+		</span></div><img src="{% static "mayr-small.png" %}" /></div>
 		<div class="short-block footer"></div>
 	</body>
 </html>

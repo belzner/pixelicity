@@ -9,6 +9,7 @@ from pixgame.models import Locations, UserLocs
 def index(request):
 	name = ""
 	locations = []
+	allLocs = []
 	if request.user.is_authenticated():
 		name = request.user.first_name
 		userLoc = UserLocs.objects.get(user=request.user)
@@ -29,11 +30,11 @@ def userlogin(request):
 	if user is not None:
 		if user.is_active:
 			login(request, user)
-	return redirect('index')
+	return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def userlogout(request):
 	logout(request)
-	return redirect('index')
+	return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def userreg(request):
 	un = request.POST['username']

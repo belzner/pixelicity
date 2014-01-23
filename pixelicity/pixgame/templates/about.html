@@ -52,7 +52,7 @@
 				{% csrf_token %}
 				Username: <input type="text" name="username" /><br /><br />
 				Password: <input type="password" name="password" /><br /><br />
-				<input type="submit" value="Log in" />
+				<button type="submit" value="Log in" class="btn btn-success">Log in</button>
 			</form>
 		</div>
 		<div class="reg-box">
@@ -63,15 +63,19 @@
 				Password: <input type="password" name="password" /><br /><br />
 				Email Address: <input type="text" name="email" /><br /><br />
 				Name: <input type="text" name="first" /> <input type="text" name="last" /><br /><br />
-				<input type="submit" value="Register" />
+				<button type="submit" value="Register" class="btn btn-success">Register</button>
 			</form>
 		</div>
 		{% endif %}
 		<div class="body">
 			<div id="map-canvas"></div>
 			<span class="intro"><h1>Grow your city.</h1>
-				As you explore your city in the real world, you're building it in Pixelicity. Construct buildings, collect achievements, and get to know the place you live.
-				<span class="button">Get Started</span>
+				As you explore your city in the real world, you're building it in Pixelicity. Construct buildings, collect achievements, and get to know the place you live.<br /><br />
+				{% if user.is_authenticated %}
+					<span class="center"><a class="btn btn-primary btn-lg" href="{% url 'index' %}" role="button">Go to Your City</a></span><br />
+				{% else %}
+					<span class="center"><button type="button" class="reg btn btn-primary btn-lg">Get Started</button></span><br />
+				{% endif %}
 				<span class="center">Or learn more below...</span>
 			</span>
 			<div class="short-block center">Welcome to Pixelicity!</div>
