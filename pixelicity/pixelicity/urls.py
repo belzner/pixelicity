@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     url(r'^login', views.userlogin, name='login'),
     url(r'^logout', views.userlogout, name='logout'),
     url(r'^register', views.userreg, name='register'),
+    url(r'^addloc', views.addloc, name='addloc')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

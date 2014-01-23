@@ -8,6 +8,7 @@ class Locations(models.Model):
 	locName = models.CharField(max_length=80)
 	locType = models.CharField(max_length=20)
 	locImage = models.CharField(max_length=40)
+	locId = models.IntegerField()
 
 	def __unicode__(self):
 		return self.locName

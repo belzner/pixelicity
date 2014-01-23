@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pixgame',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
