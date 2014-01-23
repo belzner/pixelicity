@@ -13,7 +13,8 @@
 				var mapOptions = {
 					center: new google.maps.LatLng(42.358, -71.094),
 					zoom: 14,
-					disableDefaultUI: true
+					disableDefaultUI: true,
+					streetViewControl: false
 				};
 				var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 				{% if user.is_authenticated %}
@@ -25,40 +26,75 @@
 						var overlay{{ forloop.counter }} = new google.maps.GroundOverlay('{% static loc.locImage %}', imageBounds);
 						overlay{{ forloop.counter }}.setMap(map);
 					{% endfor %}
-					{% for loc in allLocs %}
-						{% if loc not in locations %}
-							var circOptions = {
-								strokeColor: '#000000',
-								strokeOpacity: 1.0,
-								strokeWeight: 2,
-								fillColor: '#ffffff',
-								fillOpacity: 1.0,
-								map: map,
-								center: new google.maps.LatLng({{ loc.centerLat }}, {{ loc.centerLng }}),
-								radius: 5
-							};
-							var circ{{ forloop.counter }} = new google.maps.Circle(circOptions);
-							/*var marker = new google.maps.Marker({
-								position: new google.maps.LatLng({{ loc.centerLat }}, {{ loc.centerLng }}),
-								title: '{{ loc.locName }}'
-							});
-							marker.setMap(map);*/
-							//center{{ forloop.counter }} = circ.center;
-							google.maps.event.addListener(circ{{ forloop.counter }}, 'click', function() {
-								//map.setCenter(center{{ forloop.counter }});
-								$.get("{% url 'addloc' %}", { li: {{loc.locId}} }, function(json) {
-									//alert("Was successful?: " + json['id']);
-									circ{{ forloop.counter }}.setMap(null);
-									var imageBounds = new google.maps.LatLngBounds(
-										new google.maps.LatLng({{ loc.centerLat }}-0.0003, {{ loc.centerLng }}-0.00045),
-										new google.maps.LatLng({{ loc.centerLat }}+0.0004, {{ loc.centerLng }}+0.00045)
-									);
-									var overlay{{ forloop.counter }} = new google.maps.GroundOverlay('{% static loc.locImage %}', imageBounds);
-									overlay{{ forloop.counter }}.setMap(map);
+					{% if locations %}
+						{% for loc in allLocs %}
+							{% if loc not in locations %}
+								var circOptions = {
+									strokeColor: '#000000',
+									strokeOpacity: 1.0,
+									strokeWeight: 2,
+									fillColor: '#ffffff',
+									fillOpacity: 1.0,
+									map: map,
+									center: new google.maps.LatLng({{ loc.centerLat }}, {{ loc.centerLng }}),
+									radius: 5
+								};
+								var circ{{ forloop.counter }} = new google.maps.Circle(circOptions);
+								var infowindow{{ forloop.counter }} = new google.maps.InfoWindow({
+									content: '<div>{{ loc.locName }}</div>',
+									position: new google.maps.LatLng({{ loc.centerLat }}+.00005, {{ loc.centerLng }})
 								});
+								google.maps.event.addListener(circ{{ forloop.counter }}, 'mouseover', function() {
+									infowindow{{ forloop.counter }}.open(map);
+								});
+								google.maps.event.addListener(circ{{ forloop.counter }}, 'click', function() {
+									//map.setCenter(center{{ forloop.counter }});
+									var conf = confirm("Build {{ loc.locName }}?");
+									if (conf) {
+										$.get("{% url 'addloc' %}", { li: {{loc.locId}} }, function(json) {
+											//alert("Was successful?: " + json['id']);
+											circ{{ forloop.counter }}.setMap(null);
+											var imageBounds = new google.maps.LatLngBounds(
+												new google.maps.LatLng({{ loc.centerLat }}-0.0003, {{ loc.centerLng }}-0.00045),
+												new google.maps.LatLng({{ loc.centerLat }}+0.0004, {{ loc.centerLng }}+0.00045)
+											);
+											var overlay{{ forloop.counter }} = new google.maps.GroundOverlay('{% static loc.locImage %}', imageBounds);
+											overlay{{ forloop.counter }}.setMap(map);
+										});
+									}
+								});
+							{% endif %}
+						{% endfor %}
+					{% else %}
+						$(document).ready(function() {
+							$(".mayr").hide();
+							$(".cont").click(function() {
+								$(".info-box").fadeToggle();
+								$(".mayr").show();
 							});
-						{% endif %}
-					{% endfor %}
+						});
+						google.maps.event.addListener(map, 'click', function(event) {
+							homeLat = event.latLng.lat();
+							homeLng = event.latLng.lng();
+							var conf = confirm("Build home here?");
+							if (conf) {
+								$.get("{% url 'addhome' %}", { lat: homeLat, lng: homeLng }, function(json) {
+									var imageBounds = new google.maps.LatLngBounds(
+										new google.maps.LatLng(homeLat-0.0003, homeLng-0.00045),
+										new google.maps.LatLng(homeLat+0.0004, homeLng+0.00045)
+									);
+									var overlaynew = new google.maps.GroundOverlay('{% static "loc-res.png" %}', imageBounds);
+									overlaynew.setMap(map);
+								});
+								$(document).ready(function() {
+									$(".mayr").hide();
+									$(".info-box span").html('Great! With a bit of hard work, this city will be a bustling metropolis in no time! Hard work on your part, I mean. I\'m the Mayor, after all, I can\'t be doing any heavy lifting!<br /><br />Once you\'ve visited a location, just click on the corresponding marker on the map to build there. Now get going! I want to see this town bursting with excitement!');
+									$(".mayr-box span").html("Mayr says: Hello again, {{ name }}! Found any nice building sites for me lately? I'm waiting!");
+									$(".info-box").fadeToggle();
+								});
+							}
+						});
+					{% endif %}
 				{% endif %}
 			}
 			google.maps.event.addDomListener(window, 'load', initialize);
@@ -81,8 +117,18 @@
 				}
 			}*/
 			$(document).ready(function() {
-				$(".login-box").hide();
-				$(".reg-box").hide();
+				{% if not user.is_authenticated %}
+					$(".login-box").hide();
+					$(".reg-box").hide();
+					$(".login").click(function() {
+						$(".login-box").fadeToggle();
+						$(".reg-box").hide();
+					});
+					$(".reg").click(function() {
+						$(".reg-box").fadeToggle();
+						$(".login-box").hide();
+					});
+				{% endif %}
 				$(".stats").click(function() {
 					$(this).toggleClass("stats-open", 500);
 					$(".stats-title").toggleHTML("&lt;", "&gt;");
@@ -90,14 +136,6 @@
 				$(".achieve").click(function() {
 					$(this).toggleClass("achieve-open", 500);
 					$(".achieve-title").toggleHTML("&lt;", "&gt;");
-				});
-				$(".login").click(function() {
-					$(".login-box").fadeToggle();
-					$(".reg-box").hide();
-				});
-				$(".reg").click(function() {
-					$(".reg-box").fadeToggle();
-					$(".login-box").hide();
 				});
 			});
 		</script>
@@ -108,46 +146,102 @@
 			<span class="menu"><ul>
 				<li><a href="{% url 'index' %}">Home</a></li>
 				<li><a href="{% url 'about' %}">About</a></li>
-				<li><a href="#">Visit</a></li>
+				<li><a href="{% url 'help' %}">Help</a></li>
 			</ul></span>
 			<span class="greeting">{% if user.is_authenticated %}Hello, {{ name }} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a> | <a class="reg">Register</a>{% endif %}</span>
 		</div>
 		{% if not user.is_authenticated %}
-		<div class="login-box">
-			<h1>Log In</h1>
-			<form action="{% url 'login' %}" method="post">
-				{% csrf_token %}
-				Username: <input type="text" name="username" /><br /><br />
-				Password: <input type="password" name="password" /><br /><br />
-				<button type="submit" value="Log in" class="btn btn-success">Log in</button>
-			</form>
-		</div>
-		<div class="reg-box">
-			<h1>Register</h1>
-			<form action="{% url 'register' %}" method="post">
-				{% csrf_token %}
-				Username: <input type="text" name="username" /><br /><br />
-				Password: <input type="password" name="password" /><br /><br />
-				Email Address: <input type="text" name="email" /><br /><br />
-				Name: <input type="text" name="first" /> <input type="text" name="last" /><br /><br />
-				<button type="submit" value="Register" class="btn btn-success">Register</button>
-			</form>
-		</div>
+			<div class="floating-box login-box">
+				<h1>Log In</h1>
+				<form action="{% url 'login' %}" method="post">
+					{% csrf_token %}
+					Username: <input type="text" name="username" /><br /><br />
+					Password: <input type="password" name="password" /><br /><br />
+					<button type="submit" value="Log in" class="btn btn-success">Log in</button>
+				</form>
+			</div>
+			<div class="floating-box reg-box">
+				<h1>Register</h1>
+				<form action="{% url 'register' %}" method="post">
+					{% csrf_token %}
+					Username: <input type="text" name="username" /><br /><br />
+					Password: <input type="password" name="password" /><br /><br />
+					Email Address: <input type="text" name="email" /><br /><br />
+					Name: <input type="text" name="first" /> <input type="text" name="last" /><br /><br />
+					<button type="submit" value="Register" class="btn btn-success">Register</button>
+				</form>
+			</div>
+		{% else %}
+			{% if not locations %}
+				<div class="floating-box reg-box info-box">
+					<span>
+						<h1>Welcome!</h1>
+						Ooh, my first loyal subject! As you can see, this city doesn't look like much yet. Hopefully you can help me with that. Why don't you start by building yourself a house? Select the place you live on the map, and I'll help you build a house there.
+					</span><br /><br />
+					<button type="button" class="cont btn btn-primary btn-lg">Continue</button>
+					<img src="{% static "mayr-small.png" %}" style="position:absolute;margin-top:10px;left:80%;" />
+				</div>
+			{% endif %}
 		{% endif %}
 		<div class="stats">
-			<div class="wrapper"><div class="stats-title">&gt;</div></div>
+			<div class="wrapper">
+				<div class="stats-title">&gt;</div>
+				<div class="stats-content">
+					{% if stats %}
+						<p>
+							<span class="stat"><h4>Total Buildings:</h4> {{ stats.0 }}</span>
+							<span class="stat substat"><h4>Residential:</h4> {{ stats.1 }}</span>
+							<span class="stat substat"><h4>Restaurants:</h4> {{ stats.2 }}</span>
+						</p>
+						<p>
+							<span class="stat"><h4>Achievements:</h4> {{ stats.3 }}</span>
+						</p>
+						<p>
+							<span class="stat"><h4>Date Joined:</h4> {{ stats.4 }}</span>
+						</p>
+					{% endif %}
+				</div>
+			</div>
 		</div>
 		<div class="achieve">
-			<div class="wrapper"><div class="achieve-title">&lt;</div></div>
+			<div class="wrapper">
+				<div class="achieve-title">&lt;</div>
+				<div class="achieve-content">
+					{% if achievements %}
+						<table>
+							{% for ach in achievements %}
+								<tr><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
+								<tr><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+							{% endfor %}
+						</table>
+					{% endif %}
+					<table class="nothave">
+						{% for ach in allAch %}
+							{% if ach not in achievements %}
+								<tr><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
+								<tr><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+							{% endif %}
+						{% endfor %}
+					</table>
+				</div>
+			</div>
 		</div>
 		<div id="map-canvas"></div>
 		<div class="mayr"><div class="mayr-box mayr-talk"><span>Mayr says:
 			{% if user.is_authenticated %}
-				Hello again, {{ name }}! Found any nice building sites for me lately? I'm waiting!
+				{% if locations %}
+					{% if new %}
+						Ooh, look at that! You got a new achievement. Check the "Achievements" panel for details.
+					{% else %}
+						Hello again, {{ name }}! Found any nice building sites for me lately? I'm waiting!
+					{% endif %}
+				{% else %}
+					Hello, {{ name }}! You should start by building yourself a house. Just click where you live on the map!
+				{% endif %}
 			{% else %}
-				Welcome to Pixelicity! Why don't you check out our <a href=\"{% url 'about' %}\">about</a> page for more information?
+				Welcome to Pixelicity! Why don't you check out our <a href="{% url 'about' %}">about</a> page for more information?
 			{% endif %}
 		</span></div><img src="{% static "mayr-small.png" %}" /></div>
-		<div class="short-block footer"></div>
+		<div class="short-block footer"><span class="foot-left">&copy; 2014 Megan Belzner, Designed for MIT's 6.470 Web Programming Competition</span><span class="foot-right">Powered by <a href="http://maps.google.com/">Google Maps</a> and <a href="http://docs.citygridmedia.com/display/citygridv2/Places+API">CityGrid Places</a></span></div>
 	</body>
 </html>

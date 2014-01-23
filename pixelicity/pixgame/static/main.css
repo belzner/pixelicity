@@ -63,11 +63,11 @@ a:hover {
 	color: #000000;
 	text-decoration: underline;
 }
-.header a {
+.header a, .footer a {
 	color: #cadfff;
 	text-decoration: none;
 }
-.header a:hover {
+.header a:hover, .footer a:hover {
 	color: #ffffff;
 }
 .center {
@@ -80,31 +80,37 @@ a:hover {
 	border-radius: 15px;
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
-.login-box {
+.floating-box {
 	width: 40%;
-	padding: 40px 10px 70px 10px;
 	position: absolute;
 	top: 100px;
 	left: 30%;
 	background-color: #ffffff;
 	z-index: 5;
-	text-align: center;
 	border-radius: 15px;
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
-.reg-box {
-	width: 40%;
-	padding: 20px 10px 50px 10px;
-	position: absolute;
-	top: 100px;
-	left: 30%;
-	background-color: #ffffff;
-	z-index: 5;
+.login-box {
+	padding: 40px 10px 70px 10px;
 	text-align: center;
-	border-radius: 15px;
-	box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+}
+.reg-box {
+	padding: 20px 10px 50px 10px;
+	text-align: center;
 }
 .title img {
 	padding-bottom: 10px;
 	padding-right: 5px;
+}
+.foot-left {
+	position: absolute;
+	left: 10px;
+	font-size: 60%;
+	margin-top: 10px;
+}
+.foot-right {
+	position: absolute;
+	right: 10px;
+	font-size: 60%;
+	margin-top: 10px;
 }

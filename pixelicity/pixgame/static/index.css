@@ -36,6 +36,15 @@
 	background-repeat: no-repeat;
 	background-position: 0px 35px;
 }
+.stats-content {
+	position: absolute;
+	top: 5%;
+	left: 25px;
+	width: 170px;
+	height: 90%;
+	padding-left: 10px;
+	overflow: auto;
+}
 .achieve {
 	position: fixed;
 	top: 15%;
@@ -65,6 +74,15 @@
 	background-repeat: no-repeat;
 	background-position: 0px 35px;
 }
+.achieve-content {
+	position: absolute;
+	top: 5%;
+	left: 50px;
+	width: 170px;
+	height: 90%;
+	padding-left: 10px;
+	overflow: auto;
+}
 .mayr {
 	position: fixed;
 	bottom: 40px;
@@ -89,4 +107,30 @@
 	padding: 10px;
 	margin-right: 50px;
 	text-align: center;
+}
+.ach-title {
+	font-weight: bold;
+	padding: 5px;
+}
+.ach-hint {
+	font-size: smaller;
+	padding: 5px;
+}
+.nothave {
+	opacity: 0.3;
+}
+.stats-content h4 {
+	display: inline;
+}
+.stat {
+	margin: 5px;
+	display: inline-block;
+	width: 80%;
+}
+.substat {
+	position: relative;
+	left: 20px;
+}
+.foot-right {
+	right: 30px;
 }

@@ -2,23 +2,13 @@
 <html>
 	<head>
 		{% load staticfiles %}
-		<link rel="stylesheet" type="text/css" href="{% static "about.css" %}" />
+		<link rel="stylesheet" type="text/css" href="{% static "help.css" %}" />
 		<script type="text/javascript" src="{% static "jquery-1.10.2.js" %}"></script>
 		<script type="text/javascript" src="{% static "jquery.plugins.js" %}"></script>
 		<script type="text/javascript" src="{% static "jquery-ui-1.10.3.custom.js" %}"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCt8jX0GcgBNxSkh3_i-VuHQ8dW1fqbTg4&sensor=true">
 		</script>
 		<script type="text/javascript">
-			function initialize() {
-				var mapOptions = {
-					center: new google.maps.LatLng(42.358, -71.094),
-					zoom: 14,
-					disableDefaultUI: true,
-					scrollwheel: false
-				};
-				var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-			}
-			google.maps.event.addDomListener(window, 'load', initialize);
 			$(document).ready(function() {
 				$(".login-box").hide();
 				$(".reg-box").hide();
@@ -68,27 +58,20 @@
 		</div>
 		{% endif %}
 		<div class="body">
-			<div id="map-canvas"></div>
-			<span class="intro"><h1>Grow your city.</h1>
-				As you explore your city in the real world, you're building it in Pixelicity. Construct buildings, collect achievements, and get to know the place you live.<br /><br />
-				{% if user.is_authenticated %}
-					<span class="center"><a class="btn btn-primary btn-lg" href="{% url 'index' %}" role="button">Go to Your City</a></span><br />
-				{% else %}
-					<span class="center"><button type="button" class="reg btn btn-primary btn-lg">Get Started</button></span><br />
-				{% endif %}
-				<span class="center">Or learn more below...</span>
-			</span>
-			<div class="short-block center">Welcome to Pixelicity!</div>
 			<div class="about-block one">
-				<span class="mayr-box">Hi there! I'm Mayr, the Mayor of Pixelicity. Well, Mayor is a strong word. Really, I just happened across this bit of land one day and decided it was mine now. Nothing wrong with that, right? I've always wanted to own a city!<br /><br />It's looking a bit sparse though. Maybe you can help with that?<img src="{% static "mayr.png" %}" /></span>
-			</div>
-			<div></div>
-			<div class="wrapper">
-				<div class="about-block row">
-					<div class="info col-md-3 col-md-offset-1"><h2>Construct</h2>When you check in at a location in the real world, the corresponding building appears in Pixelicity. Grow the city to unlock new buildings and entice Pixens to visit.</div>
-					<div class="info col-md-3"><h2>Collect</h2>As you grow your city, you'll collect achievements to mark your progress. Some are straightforward. Some... not so much!</div>
-					<div class="info col-md-3"><h2>Explore</h2>Get to know the place you live! By exploring your city, you can help Pixelicity grow. At a loss for where to go next? Pixelicity gives you suggestions and challenges to get you going.</div>
-				</div>
+				<h1>What is this all about?</h1>
+				<p>Pixelicity is a website designed to encourage you to explore the place you live. Alongside Mayr and some other quirky characters, you'll work to bring the city from a sparse wasteland to a bustling metropolis.</p>
+				<h1>So how do I play?</h1>
+				<p>Start by making an account through the link at the upper right corner of the screen. Mayr will guide you through building your first building, but from there it's your turn! You can fill in any places you've already been by clicking on the circular marker at that spot on the map (mouse over the marker to see the name of the location). Then, anytime you visit a new location, add it on Pixelicity. Over time, you'll see the city grow before your very eyes!</p>
+				<h1>How do I tell how I'm doing?</h1>
+				<p>As you grow your city, you'll collect achievements for reaching certain goals. You can see which achievements you have, and which you have yet to get, on the "Achievements" panel on the right side of the page.</p>
+				<p>You might also want a more direct way to track your progress. The "Statistics" panel on the left side of the page tells you how many buildings you've built (and of what types), how many achivements you've collected, and more.</p>
+				<h1>Help! Something isn't working!</h1>
+				<p>Sometimes there may be bugs in the site that we haven't caught yet. If you see something that doesn't work properly, please email <a href="mailto:belzner@mit.edu">belzner@mit.edu</a>.</p>
+				<h1>How did this website come about?</h1>
+				<p>This website was conceived, designed, and built by Megan Belzner, a sophomore at MIT, for MIT's 6.470 Web Programming Competition.</p>
+				<h1>I have a question that isn't answered here.</h1>
+				<p>Well then, let us answer it for you! Feel free to email <a href="mailto:belzner@mit.edu">belzner@mit.edu</a> with any questions you may have, and we'll try our best to get back to you ASAP.</p>
 			</div>
 		</div>
 		<div class="short-block footer"><span class="foot-left">&copy; 2014 Megan Belzner, Designed for MIT's 6.470 Web Programming Competition</span><span class="foot-right">Powered by <a href="http://maps.google.com/">Google Maps</a> and <a href="http://docs.citygridmedia.com/display/citygridv2/Places+API">CityGrid Places</a></span></div>

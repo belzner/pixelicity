@@ -19,3 +19,19 @@ class UserLocs(models.Model):
 
 	def __unicode__(self):
 		return self.user.username
+
+class Achievement(models.Model):
+	compName = models.CharField(max_length=20)
+	humanName = models.CharField(max_length=80)
+	hint = models.TextField()
+	image = models.CharField(max_length=40)
+
+	def __unicode__(self):
+		return self.humanName
+
+class UserAchieve(models.Model):
+	user = models.OneToOneField(User)
+	achievements = models.ManyToManyField(Achievement)
+
+	def __unicode__(self):
+		return self.user.username
