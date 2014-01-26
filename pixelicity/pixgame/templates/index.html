@@ -47,6 +47,9 @@
 								google.maps.event.addListener(circ{{ forloop.counter }}, 'mouseover', function() {
 									infowindow{{ forloop.counter }}.open(map);
 								});
+								google.maps.event.addListener(circ{{ forloop.counter }}, 'mouseout', function() {
+									infowindow{{ forloop.counter }}.close(map);
+								});
 								google.maps.event.addListener(circ{{ forloop.counter }}, 'click', function() {
 									//map.setCenter(center{{ forloop.counter }});
 									var conf = confirm("Build {{ loc.locName }}?");
@@ -60,6 +63,15 @@
 											);
 											var overlay{{ forloop.counter }} = new google.maps.GroundOverlay('{% static loc.locImage %}', imageBounds);
 											overlay{{ forloop.counter }}.setMap(map);
+											$(".numAll").html(json['numResi']+json['numRest']);
+											$(".numResi").html(json['numResi']);
+											$(".numRest").html(json['numRest']);
+											$(".numAch").html(json['numAch']);
+											if (json['newAch']) {
+												$(".mayr-box span").html('Mayr says: Ooh, look at that! You got a new achievement. Check the "Achievements" panel for details.');
+												var tag = "." + json['newAch'];
+												$(tag).removeClass('nothave');
+											}
 										});
 									}
 								});
@@ -78,6 +90,15 @@
 							homeLng = event.latLng.lng();
 							var conf = confirm("Build home here?");
 							if (conf) {
+								$(document).ready(function() {
+									$(".mayr").hide();
+									$(".info-box span").html('Great! With a bit of hard work, this city will be a bustling metropolis in no time! Hard work on your part, I mean. I\'m the Mayor, after all, I can\'t be doing any heavy lifting!<br /><br />Once you\'ve visited a location, just click on the corresponding marker on the map to build there. Now get going! I want to see this town bursting with excitement!');
+									$(".mayr-box span").html("Mayr says: Hello again, {{ name }}! Found any nice building sites for me lately? I'm waiting!");
+									$(".info-box").fadeToggle();
+									$(".cont").click(function() {
+										location.reload();
+									});
+								});
 								$.get("{% url 'addhome' %}", { lat: homeLat, lng: homeLng }, function(json) {
 									var imageBounds = new google.maps.LatLngBounds(
 										new google.maps.LatLng(homeLat-0.0003, homeLng-0.00045),
@@ -85,12 +106,11 @@
 									);
 									var overlaynew = new google.maps.GroundOverlay('{% static "loc-res.png" %}', imageBounds);
 									overlaynew.setMap(map);
-								});
-								$(document).ready(function() {
-									$(".mayr").hide();
-									$(".info-box span").html('Great! With a bit of hard work, this city will be a bustling metropolis in no time! Hard work on your part, I mean. I\'m the Mayor, after all, I can\'t be doing any heavy lifting!<br /><br />Once you\'ve visited a location, just click on the corresponding marker on the map to build there. Now get going! I want to see this town bursting with excitement!');
-									$(".mayr-box span").html("Mayr says: Hello again, {{ name }}! Found any nice building sites for me lately? I'm waiting!");
-									$(".info-box").fadeToggle();
+									//if (json['newAch']) {
+									//	$(".mayr-box span").html('Mayr says: Ooh, look at that! You got a new achievement. Check the "Achievements" panel for details.');
+									//	var tag = "." + json['newAch'];
+									//	$(tag).removeClass('nothave');
+									//}
 								});
 							}
 						});
@@ -136,6 +156,7 @@
 				$(".achieve").click(function() {
 					$(this).toggleClass("achieve-open", 500);
 					$(".achieve-title").toggleHTML("&lt;", "&gt;");
+					$(".mayr-box span").html("Mayr says: You're pretty good at this, {{ name }}. I guess I was right to recruit you after all. Now get back to work!");
 				});
 			});
 		</script>
@@ -189,12 +210,12 @@
 				<div class="stats-content">
 					{% if stats %}
 						<p>
-							<span class="stat"><h4>Total Buildings:</h4> {{ stats.0 }}</span>
-							<span class="stat substat"><h4>Residential:</h4> {{ stats.1 }}</span>
-							<span class="stat substat"><h4>Restaurants:</h4> {{ stats.2 }}</span>
+							<span class="stat"><h4>Total Buildings:</h4> <span class="numAll">{{ stats.0 }}</span></span>
+							<span class="stat substat"><h4>Residential:</h4> <span class="numResi">{{ stats.1 }}</span></span>
+							<span class="stat substat"><h4>Restaurants:</h4> <span class="numRest">{{ stats.2 }}</span></span>
 						</p>
 						<p>
-							<span class="stat"><h4>Achievements:</h4> {{ stats.3 }}</span>
+							<span class="stat"><h4>Achievements:</h4> <span class="numAch">{{ stats.3 }}</span></span>
 						</p>
 						<p>
 							<span class="stat"><h4>Date Joined:</h4> {{ stats.4 }}</span>
@@ -215,11 +236,11 @@
 							{% endfor %}
 						</table>
 					{% endif %}
-					<table class="nothave">
+					<table>
 						{% for ach in allAch %}
 							{% if ach not in achievements %}
-								<tr><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
-								<tr><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+								<tr class="nothave {{ ach.compName }}"><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
+								<tr class="nothave {{ ach.compName }}"><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
 							{% endif %}
 						{% endfor %}
 					</table>

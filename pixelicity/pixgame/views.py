@@ -1,10 +1,12 @@
-from django.utils import simplejson
+#from django.utils import simplejson
+import json
+from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from pixgame.models import Locations, UserLocs, UserAchieve, Achievement
-from pixgame.achieve import checkAchieve
+from pixgame.achieve import checkAch, parseAch, collectAch
 
 # Create your views here.
 def index(request):
@@ -23,18 +25,10 @@ def index(request):
 		newAch = []
 		numResi = len(userLoc.locations.filter(locType="residential"))
 		numRest = len(userLoc.locations.filter(locType="restaurant"))
-		a = Achievement.objects.get(compName='getstart')
-		req = numResi >= 1
-		newAch.append(checkAchieve(a, req, request.user))
-		a = Achievement.objects.get(compName='firstfood')
-		req = numRest >= 1
-		newAch.append(checkAchieve(a, req, request.user))
-		a = Achievement.objects.get(compName='hundredfood')
-		req = numRest >= 100
-		newAch.append(checkAchieve(a, req, request.user))
-		userAch = UserAchieve.objects.get(user=request.user)
-		if True in newAch:
+		newAch = collectAch(request.user, userLoc)
+		if newAch:
 			new = True
+		userAch = UserAchieve.objects.get(user=request.user)
 		achievements = userAch.achievements.all()
 		allAch = Achievement.objects.all()
 		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined]
@@ -86,21 +80,29 @@ def userreg(request):
 	return redirect('index')
 
 def addloc(request):
-	results = {'success': False, 'id': 0}
+	ul = UserLocs.objects.get(user=request.user)
+	numAch = len(UserAchieve.objects.get(user=request.user).achievements.all())
+	numResi = len(ul.locations.filter(locType="residential"))
+	numRest = len(ul.locations.filter(locType="restaurant"))
+	results = {'success': False, 'id': 0, 'newAch': False, 'numAch': numAch, 'numResi': numResi, 'numRest': numRest}
 	if request.user.is_authenticated():
 		if request.method == u'GET':
 			GET = request.GET
 			if GET.has_key(u'li'):
 				li = int(GET[u'li'])
 				loc = Locations.objects.get(locId=li)
-				ul = UserLocs.objects.get(user=request.user)
 				ul.locations.add(loc)
 				ul.save()
-				results = {'success': True, 'id': li}
-	json = simplejson.dumps(results)
-	return HttpResponse(json, mimetype='application/json')
+				newAch = collectAch(request.user, ul)
+				numAch = len(UserAchieve.objects.get(user=request.user).achievements.all())
+				numResi = len(ul.locations.filter(locType="residential"))
+				numRest = len(ul.locations.filter(locType="restaurant"))
+				results = {'success': True, 'id': li, 'newAch': newAch, 'numAch': numAch, 'numResi': numResi, 'numRest': numRest}
+	jsonRes = json.dumps(results)
+	return HttpResponse(jsonRes, mimetype='application/json')
 
 def addhome(request):
+	#results = {'success': False, 'newAch': False}
 	results = {'success': False}
 	if request.user.is_authenticated():
 		if request.method == u'GET':
@@ -113,6 +115,8 @@ def addhome(request):
 				ul = UserLocs.objects.get(user=request.user)
 				ul.locations.add(l)
 				ul.save()
+				#newAch = collectAch(request.user, ul)
+				#results = {'success': True, 'newAch': newAch}
 				results = {'success': True}
-	json = simplejson.dumps(results)
-	return HttpResponse(json, mimetype='application/json')
+	jsonRes = json.dumps(results)
+	return HttpResponse(jsonRes, mimetype='application/json')
