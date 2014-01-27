@@ -28,13 +28,14 @@ def index(request):
 		newAch = []
 		numResi = len(userLoc.locations.filter(locType="residential"))
 		numRest = len(userLoc.locations.filter(locType="restaurant"))
+		numShop = len(userLoc.locations.filter(locType="shopping"))
 		newAch = collectAch(request.user, userLoc)
 		if newAch:
 			new = True
 		userAch = UserAchieve.objects.get(user=request.user)
 		achievements = userAch.achievements.all()
 		allAch = Achievement.objects.all()
-		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined]
+		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined, numShop]
 	return render(request, 'index.html', {'name': name, 'username': un, 'locations': locations, 'allLocs': allLocs, 'achievements': achievements, 'new': new, 'allAch': allAch, 'stats': stats})
 
 def about(request):
@@ -128,7 +129,8 @@ def addloc(request):
 				numAch = len(UserAchieve.objects.get(user=request.user).achievements.all())
 				numResi = len(ul.locations.filter(locType="residential"))
 				numRest = len(ul.locations.filter(locType="restaurant"))
-				results = {'success': True, 'id': li, 'newAch': newAch, 'numAch': numAch, 'numResi': numResi, 'numRest': numRest}
+				numShop = len(ul.locations.filter(locType="shopping"))
+				results = {'success': True, 'id': li, 'newAch': newAch, 'numAch': numAch, 'numResi': numResi, 'numRest': numRest, 'numShop': numShop}
 	jsonRes = json.dumps(results)
 	return HttpResponse(jsonRes, mimetype='application/json')
 

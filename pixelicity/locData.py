@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 #from pixgame.models import Locations
 
-tree = ET.parse('restaurantData.xml')
+tree = ET.parse('shopData.xml')
 root = tree.getroot()
 
 #for child in root:

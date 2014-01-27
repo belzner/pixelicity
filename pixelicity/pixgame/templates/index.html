@@ -59,9 +59,10 @@
 										);
 										var overlay{{ forloop.counter }} = new google.maps.GroundOverlay('{% static loc.locImage %}', imageBounds);
 										overlay{{ forloop.counter }}.setMap(map);
-										$(".numAll").html(json['numResi']+json['numRest']);
+										$(".numAll").html(json['numResi']+json['numRest']+json['numShop']);
 										$(".numResi").html(json['numResi']);
 										$(".numRest").html(json['numRest']);
+										$(".numShop").html(json['numShop']);
 										$(".numAch").html(json['numAch']);
 										if (json['newAch']) {
 											$(".mayr-box span").html('Mayr says: Ooh, look at that! You got a new achievement. Check the "Achievements" panel for details.');
@@ -178,6 +179,7 @@
 						<span class="stat"><h4>Total Buildings:</h4> <span class="numAll">{{ stats.0 }}</span></span>
 						<span class="stat substat"><h4>Residential:</h4> <span class="numResi">{{ stats.1 }}</span></span>
 						<span class="stat substat"><h4>Restaurants:</h4> <span class="numRest">{{ stats.2 }}</span></span>
+						<span class="stat substat"><h4>Shopping:</h4> <span class="numShop">{{ stats.5 }}</span></span>
 					</p>
 					<p>
 						<span class="stat"><h4>Achievements:</h4> <span class="numAch">{{ stats.3 }}</span></span>

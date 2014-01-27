@@ -19,6 +19,7 @@ def collectAch(user, userLoc):
 	newAch = []
 	numResi = len(userLoc.locations.filter(locType="residential"))
 	numRest = len(userLoc.locations.filter(locType="restaurant"))
+	numShop = len(userLoc.locations.filter(locType="shopping"))
 
 	a = Achievement.objects.get(compName='getstart')
 	req = numResi >= 1
@@ -38,6 +39,22 @@ def collectAch(user, userLoc):
 
 	a = Achievement.objects.get(compName='hundredfood')
 	req = numRest >= 100
+	newAch = parseAch(a, req, user, newAch)
+
+	a = Achievement.objects.get(compName='firstshop')
+	req = numShop >= 1
+	newAch = parseAch(a, req, user, newAch)
+
+	a = Achievement.objects.get(compName='fiveshop')
+	req = numShop >= 5
+	newAch = parseAch(a, req, user, newAch)
+
+	a = Achievement.objects.get(compName='twentyshop')
+	req = numShop >= 20
+	newAch = parseAch(a, req, user, newAch)
+
+	a = Achievement.objects.get(compName='hundredshop')
+	req = numShop >= 100
 	newAch = parseAch(a, req, user, newAch)
 
 	if len(newAch) > 0:
