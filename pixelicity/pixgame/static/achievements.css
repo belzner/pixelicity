@@ -1,0 +1,42 @@
+@import url('main.css');
+
+body {
+	background-color: #f0ede7;
+}
+.footer {
+	position: relative;
+	top: 50px;
+}
+.about-block {
+	background-color: #f0ede7;
+	width: 60%;
+	position: relative;
+	left: 20%;
+	top: 50px;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+}
+.ach-title {
+	font-weight: bold;
+	padding: 5px;
+}
+.ach-title h3 {
+	padding: 0px;
+	margin: 0px;
+}
+.ach-hint {
+	padding: 10px;
+	text-align: left;
+}
+.nothave {
+	opacity: 0.3;
+}
+table {
+	margin: 0 auto;
+	width: 80%;
+}
+tr {
+	margin: 5px;
+}

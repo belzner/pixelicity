@@ -28,6 +28,14 @@ def collectAch(user, userLoc):
 	req = numRest >= 1
 	newAch = parseAch(a, req, user, newAch)
 
+	a = Achievement.objects.get(compName='fivefood')
+	req = numRest >= 5
+	newAch = parseAch(a, req, user, newAch)
+
+	a = Achievement.objects.get(compName='twentyfood')
+	req = numRest >= 20
+	newAch = parseAch(a, req, user, newAch)
+
 	a = Achievement.objects.get(compName='hundredfood')
 	req = numRest >= 100
 	newAch = parseAch(a, req, user, newAch)

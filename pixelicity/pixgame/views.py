@@ -53,6 +53,17 @@ def help(request):
 		un = request.user.username
 	return render(request, 'help.html', {'name': name, 'username': un})
 
+def achievements(request):
+	if request.user.is_authenticated():
+		name = request.user.first_name
+		un = request.user.username
+		userAch = UserAchieve.objects.get(user=request.user)
+		achievements = userAch.achievements.all()
+		allAch = Achievement.objects.all()
+		return render(request, 'achievements.html', {'name': name, 'username': un, 'achievements': achievements, 'allAch': allAch})
+	else:
+		return redirect('index')
+
 def error(request):
 	return redirect('index')
 

@@ -67,6 +67,11 @@
 											$(".mayr-box span").html('Mayr says: Ooh, look at that! You got a new achievement. Check the "Achievements" panel for details.');
 											var tag = "." + json['newAch'];
 											$(tag).removeClass('nothave');
+											$(tag).removeClass('hidden');
+											var numVis = $("tr").length - $("tr.hidden").length;
+											if (numVis > 6) {
+												$("tr").slice(0,2).addClass('hidden');
+											}
 										}
 									});
 								}
@@ -188,22 +193,28 @@
 		<div class="wrapper">
 			<div class="achieve-title">&lt;</div>
 			<div class="achieve-content">
-				{% if achievements %}
-					<table>
-						{% for ach in achievements %}
-							<tr><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
-							<tr><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
-						{% endfor %}
-					</table>
-				{% endif %}
 				<table>
+					{% if achievements %}
+						{% for ach in achievements %}
+							{% if forloop.counter < 4 %}
+								<tr><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
+								<tr><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+							{% else %}
+								<tr class="hidden"><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
+								<tr class="hidden"><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
 					{% for ach in allAch %}
 						{% if ach not in achievements %}
-							<tr class="nothave {{ ach.compName }}"><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
-							<tr class="nothave {{ ach.compName }}"><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+							<tr class="nothave {{ ach.compName }} hidden"><td colspan="2" class="ach-title">{{ ach.humanName }}</td></tr>
+							<tr class="nothave {{ ach.compName }} hidden"><td><img src="{% static ach.image %}" height="50px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
 						{% endif %}
 					{% endfor %}
 				</table>
+				{% if user.is_authenticated %}
+					<span class="view-all"><a href="{% url 'achievements' %}">View All Achievements &rarr;</a></span>
+				{% endif %}
 			</div>
 		</div>
 	</div>

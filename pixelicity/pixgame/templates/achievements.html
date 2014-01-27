@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% load staticfiles %}
+
+{% block title %}Pixelicity | Achievements{% endblock %}
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static "achievements.css" %}" />{% endblock %}
+
+{% block content %}
+	<div class="body">
+		<div class="about-block one">
+			<h1>Achievements</h1>
+			<table>
+				{% if achievements %}
+					{% for ach in achievements %}
+						<tr><td colspan="2" class="ach-title"><h3>{{ ach.humanName }}</h3></td></tr>
+						<tr><td><img src="{% static ach.image %}" height="80px" /><td class="ach-hint">{{ ach.hint }} ({{ ach.how }})</td></tr>
+					{% endfor %}
+				{% endif %}
+				{% for ach in allAch %}
+					{% if ach not in achievements %}
+						<tr class="nothave"><td colspan="2" class="ach-title"><h3>{{ ach.humanName }}</h3></td></tr>
+						<tr class="nothave"><td><img src="{% static "ach-nothave.png" %}" height="80px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+					{% endif %}
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+{% endblock %}

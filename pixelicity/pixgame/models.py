@@ -25,6 +25,7 @@ class Achievement(models.Model):
 	humanName = models.CharField(max_length=80)
 	hint = models.TextField()
 	image = models.CharField(max_length=40)
+	how = models.TextField()
 
 	def __unicode__(self):
 		return self.humanName
