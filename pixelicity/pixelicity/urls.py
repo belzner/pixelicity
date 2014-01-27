@@ -21,3 +21,6 @@ urlpatterns = patterns('',
     url(r'^addloc', views.addloc, name='addloc'),
     url(r'^addhome', views.addhome, name='addhome')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+handler404 = views.error
+handler500 = views.error

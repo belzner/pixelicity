@@ -114,3 +114,6 @@ a:hover {
 	font-size: 60%;
 	margin-top: 10px;
 }
+.error {
+	color: #be463c;
+}

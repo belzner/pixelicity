@@ -3,6 +3,7 @@ import json
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from pixgame.models import Locations, UserLocs, UserAchieve, Achievement
@@ -11,6 +12,7 @@ from pixgame.achieve import checkAch, parseAch, collectAch
 # Create your views here.
 def index(request):
 	name = ""
+	un = ""
 	locations = []
 	allLocs = []
 	achievements = []
@@ -19,6 +21,7 @@ def index(request):
 	new = False
 	if request.user.is_authenticated():
 		name = request.user.first_name
+		un = request.user.username
 		userLoc = UserLocs.objects.get(user=request.user)
 		locations = userLoc.locations.all()
 		allLocs = Locations.objects.all().exclude(locType="residential")
@@ -32,19 +35,26 @@ def index(request):
 		achievements = userAch.achievements.all()
 		allAch = Achievement.objects.all()
 		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined]
-	return render(request, 'index.html', {'name': name, 'locations': locations, 'allLocs': allLocs, 'achievements': achievements, 'new': new, 'allAch': allAch, 'stats': stats})
+	return render(request, 'index.html', {'name': name, 'username': un, 'locations': locations, 'allLocs': allLocs, 'achievements': achievements, 'new': new, 'allAch': allAch, 'stats': stats})
 
 def about(request):
 	name = ""
+	un = ""
 	if request.user.is_authenticated():
 		name = request.user.first_name
-	return render(request, 'about.html', {'name': name})
+		un = request.user.username
+	return render(request, 'about.html', {'name': name, 'username': un})
 
 def help(request):
 	name = ""
+	un = ""
 	if request.user.is_authenticated():
 		name = request.user.first_name
-	return render(request, 'help.html', {'name': name})
+		un = request.user.username
+	return render(request, 'help.html', {'name': name, 'username': un})
+
+def error(request):
+	return redirect('index')
 
 def userlogin(request):
 	un = request.POST['username']
@@ -65,19 +75,29 @@ def userreg(request):
 	em = request.POST['email']
 	fn = request.POST['first']
 	ln = request.POST['last']
-	user = User.objects.create_user(un, em, pw)
-	user.first_name = fn
-	user.last_name = ln
-	user.save()
-	userLoc = UserLocs(user=user)
-	userLoc.save()
-	userAch = UserAchieve(user=user)
-	userAch.save()
-	user = authenticate(username=un, password=pw)
-	if user is not None:
-		if user.is_active:
-			login(request, user)
-	return redirect('index')
+	if un and pw and em:
+		user = User.objects.create_user(un, em, pw)
+		user.first_name = fn
+		user.last_name = ln
+		user.save()
+		userLoc = UserLocs(user=user)
+		userLoc.save()
+		userAch = UserAchieve(user=user)
+		userAch.save()
+		user = authenticate(username=un, password=pw)
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+		return redirect('index')
+	else:
+		if not un:
+			messages.error(request, "Please enter a username.")
+		if not pw:
+			messages.error(request, "Please enter a password.")
+		if not em:
+			messages.error(request, "Please enter an email address.")
+	return redirect(request.META.get('HTTP_REFERER', 'index'))
+
 
 def addloc(request):
 	ul = UserLocs.objects.get(user=request.user)

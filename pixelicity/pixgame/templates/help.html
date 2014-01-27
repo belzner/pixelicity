@@ -2,6 +2,7 @@
 <html>
 	<head>
 		{% load staticfiles %}
+		<title>Pixelicity | Help</title>
 		<link rel="stylesheet" type="text/css" href="{% static "help.css" %}" />
 		<script type="text/javascript" src="{% static "jquery-1.10.2.js" %}"></script>
 		<script type="text/javascript" src="{% static "jquery.plugins.js" %}"></script>
@@ -11,7 +12,9 @@
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$(".login-box").hide();
-				$(".reg-box").hide();
+				{% if not messages %}
+					$(".reg-box").hide();
+				{% endif %}
 				$(".login").click(function() {
 					$(".login-box").fadeToggle();
 					$(".reg-box").hide();
@@ -33,26 +36,32 @@
 				<li><a href="{% url 'about' %}">About</a></li>
 				<li><a href="{% url 'help' %}">Help</a></li>
 			</ul></span>
-			<span class="greeting">{% if user.is_authenticated %}Hello, {{ name }} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a> | <a class="reg">Register</a>{% endif %}</span>
+			<span class="greeting">{% if user.is_authenticated %}Hello, {% if name %}{{ name }}{% else %}{{ username }}{% endif %} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a> | <a class="reg">Register</a>{% endif %}</span>
 		</div>
 		{% if not user.is_authenticated %}
 		<div class="floating-box login-box">
 			<h1>Log In</h1>
 			<form action="{% url 'login' %}" method="post">
 				{% csrf_token %}
-				Username: <input type="text" name="username" /><br /><br />
+				Username: <input type="text" name="username" maxlength="30" /><br /><br />
 				Password: <input type="password" name="password" /><br /><br />
 				<button type="submit" value="Log in" class="btn btn-success">Log in</button>
 			</form>
 		</div>
 		<div class="floating-box reg-box">
 			<h1>Register</h1>
+			{% if messages %}
+				{% for message in messages %}
+					<span class="error">{{ message }}</span><br />
+				{% endfor %}
+				<br />
+			{% endif %}
 			<form action="{% url 'register' %}" method="post">
 				{% csrf_token %}
-				Username: <input type="text" name="username" /><br /><br />
+				Username: <input type="text" name="username" maxlength="30" /><br /><br />
 				Password: <input type="password" name="password" /><br /><br />
-				Email Address: <input type="text" name="email" /><br /><br />
-				Name: <input type="text" name="first" /> <input type="text" name="last" /><br /><br />
+				Email Address: <input type="text" name="email" maxlength="75" /><br /><br />
+				Name (optional): <input type="text" name="first" maxlength="30" size="10" /> <input type="text" name="last" maxlength="30" size="10" /><br /><br />
 				<button type="submit" value="Register" class="btn btn-success">Register</button>
 			</form>
 		</div>
@@ -65,13 +74,13 @@
 				<p>Start by making an account through the link at the upper right corner of the screen. Mayr will guide you through building your first building, but from there it's your turn! You can fill in any places you've already been by clicking on the circular marker at that spot on the map (mouse over the marker to see the name of the location). Then, anytime you visit a new location, add it on Pixelicity. Over time, you'll see the city grow before your very eyes!</p>
 				<h1>How do I tell how I'm doing?</h1>
 				<p>As you grow your city, you'll collect achievements for reaching certain goals. You can see which achievements you have, and which you have yet to get, on the "Achievements" panel on the right side of the page.</p>
-				<p>You might also want a more direct way to track your progress. The "Statistics" panel on the left side of the page tells you how many buildings you've built (and of what types), how many achivements you've collected, and more.</p>
+				<p>You might also want a more direct way to track your progress. The "Statistics" panel on the left side of the page tells you how many buildings you've built (and of what types), how many achievements you've collected, and more.</p>
 				<h1>Help! Something isn't working!</h1>
-				<p>Sometimes there may be bugs in the site that we haven't caught yet. If you see something that doesn't work properly, please email <a href="mailto:belzner@mit.edu">belzner@mit.edu</a>.</p>
+				<p>Sometimes there may be bugs in the site that we haven't caught yet. If you see something that doesn't work properly, please email <a href="mailto:pixelicity@mit.edu">pixelicity@mit.edu</a>.</p>
 				<h1>How did this website come about?</h1>
 				<p>This website was conceived, designed, and built by Megan Belzner, a sophomore at MIT, for MIT's 6.470 Web Programming Competition.</p>
 				<h1>I have a question that isn't answered here.</h1>
-				<p>Well then, let us answer it for you! Feel free to email <a href="mailto:belzner@mit.edu">belzner@mit.edu</a> with any questions you may have, and we'll try our best to get back to you ASAP.</p>
+				<p>Well then, let us answer it for you! Feel free to email <a href="mailto:pixelicity@mit.edu">pixelicity@mit.edu</a> with any questions you may have, and we'll try our best to get back to you ASAP.</p>
 			</div>
 		</div>
 		<div class="short-block footer"><span class="foot-left">&copy; 2014 Megan Belzner, Designed for MIT's 6.470 Web Programming Competition</span><span class="foot-right">Powered by <a href="http://maps.google.com/">Google Maps</a> and <a href="http://docs.citygridmedia.com/display/citygridv2/Places+API">CityGrid Places</a></span></div>

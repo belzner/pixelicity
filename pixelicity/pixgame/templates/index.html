@@ -2,6 +2,7 @@
 <html>
 	<head>
 		{% load staticfiles %}
+		<title>Pixelicity</title>
 		<link rel="stylesheet" type="text/css" href="{% static "index.css" %}" />
 		<script type="text/javascript" src="{% static "jquery-1.10.2.js" %}"></script>
 		<script type="text/javascript" src="{% static "jquery.plugins.js" %}"></script>
@@ -139,7 +140,9 @@
 			$(document).ready(function() {
 				{% if not user.is_authenticated %}
 					$(".login-box").hide();
-					$(".reg-box").hide();
+					{% if not messages %}
+						$(".reg-box").hide();
+					{% endif %}
 					$(".login").click(function() {
 						$(".login-box").fadeToggle();
 						$(".reg-box").hide();
@@ -152,11 +155,16 @@
 				$(".stats").click(function() {
 					$(this).toggleClass("stats-open", 500);
 					$(".stats-title").toggleHTML("&lt;", "&gt;");
+					{% if user.is_authenticated %}
+						$(".mayr-box span").html("Mayr says: Come on {{ name }}, this city isn't going to build itself! More buildings, more!");
+					{% endif %}
 				});
 				$(".achieve").click(function() {
 					$(this).toggleClass("achieve-open", 500);
 					$(".achieve-title").toggleHTML("&lt;", "&gt;");
-					$(".mayr-box span").html("Mayr says: You're pretty good at this, {{ name }}. I guess I was right to recruit you after all. Now get back to work!");
+					{% if user.is_authenticated %}
+						$(".mayr-box span").html("Mayr says: You're pretty good at this, {{ name }}. I guess I was right to recruit you after all. Now get back to work!");
+					{% endif %}
 				});
 			});
 		</script>
@@ -169,26 +177,32 @@
 				<li><a href="{% url 'about' %}">About</a></li>
 				<li><a href="{% url 'help' %}">Help</a></li>
 			</ul></span>
-			<span class="greeting">{% if user.is_authenticated %}Hello, {{ name }} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a> | <a class="reg">Register</a>{% endif %}</span>
+			<span class="greeting">{% if user.is_authenticated %}Hello, {% if name %}{{ name }}{% else %}{{ username }}{% endif %} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a> | <a class="reg">Register</a>{% endif %}</span>
 		</div>
 		{% if not user.is_authenticated %}
 			<div class="floating-box login-box">
 				<h1>Log In</h1>
 				<form action="{% url 'login' %}" method="post">
 					{% csrf_token %}
-					Username: <input type="text" name="username" /><br /><br />
+					Username: <input type="text" name="username" maxlength="30" /><br /><br />
 					Password: <input type="password" name="password" /><br /><br />
 					<button type="submit" value="Log in" class="btn btn-success">Log in</button>
 				</form>
 			</div>
 			<div class="floating-box reg-box">
 				<h1>Register</h1>
+				{% if messages %}
+					{% for message in messages %}
+						<span class="error">{{ message }}</span><br />
+					{% endfor %}
+					<br />
+				{% endif %}
 				<form action="{% url 'register' %}" method="post">
 					{% csrf_token %}
-					Username: <input type="text" name="username" /><br /><br />
+					Username: <input type="text" name="username" maxlength="30" /><br /><br />
 					Password: <input type="password" name="password" /><br /><br />
-					Email Address: <input type="text" name="email" /><br /><br />
-					Name: <input type="text" name="first" /> <input type="text" name="last" /><br /><br />
+					Email Address: <input type="text" name="email" maxlength="75" /><br /><br />
+					Name (optional): <input type="text" name="first" maxlength="30" size="10" /> <input type="text" name="last" maxlength="30" size="10" /><br /><br />
 					<button type="submit" value="Register" class="btn btn-success">Register</button>
 				</form>
 			</div>
