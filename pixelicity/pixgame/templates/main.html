@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{% load staticfiles %}
+		<title>{% block title %}Pixelicity{% endblock %}</title>
+		{% block css %}<link rel="stylesheet" type="text/css" href="{% static "main.css" %}" />{% endblock %}
+		<script type="text/javascript" src="{% static "jquery-1.10.2.js" %}"></script>
+		<script type="text/javascript" src="{% static "jquery.plugins.js" %}"></script>
+		<script type="text/javascript" src="{% static "jquery-ui-1.10.3.custom.js" %}"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCt8jX0GcgBNxSkh3_i-VuHQ8dW1fqbTg4&sensor=true">
+		</script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				{% if not user.is_authenticated %}
+					$(".login-box").hide();
+					{% if not messages %}
+						$(".reg-box").hide();
+					{% endif %}
+					$(".login").click(function() {
+						$(".login-box").fadeToggle();
+						$(".reg-box").hide();
+					});
+					$(".reg").click(function() {
+						$(".reg-box").fadeToggle();
+						$(".login-box").hide();
+					});
+				{% endif %}
+			});
+		</script>
+		{% block javascript %}{% endblock %}
+	</head>
+	<body>
+		<div class="short-block header">
+			<span class="title"><img src="{% static 'logo.png' %}" />Pixelicity</span>
+			<span class="menu"><ul>
+				<li><a href="{% url 'index' %}">Home</a></li>
+				<li><a href="{% url 'about' %}">About</a></li>
+				<li><a href="{% url 'help' %}">Help</a></li>
+			</ul></span>
+			<span class="greeting">{% if user.is_authenticated %}Hello, {% if name %}{{ name }}{% else %}{{ username }}{% endif %} | <a href="{% url 'logout' %}">Log Out</a>{% else %}<a class="login">Log In</a> | <a class="reg">Register</a>{% endif %}</span>
+		</div>
+		{% if not user.is_authenticated %}
+			<div class="floating-box login-box">
+				<h1>Log In</h1>
+				<form action="{% url 'login' %}" method="post">
+					{% csrf_token %}
+					Username: <input type="text" name="username" maxlength="30" /><br /><br />
+					Password: <input type="password" name="password" /><br /><br />
+					<button type="submit" value="Log in" class="btn btn-success">Log in</button>
+				</form>
+			</div>
+			<div class="floating-box reg-box">
+				<h1>Register</h1>
+				{% if messages %}
+					{% for message in messages %}
+						<span class="error">{{ message }}</span><br />
+					{% endfor %}
+					<br />
+				{% endif %}
+				<form action="{% url 'register' %}" method="post">
+					{% csrf_token %}
+					Username: <input type="text" name="username" maxlength="30" /><br /><br />
+					Password: <input type="password" name="password" /><br /><br />
+					Email Address: <input type="text" name="email" maxlength="75" /><br /><br />
+					Name (optional): <input type="text" name="first" maxlength="30" size="10" /> <input type="text" name="last" maxlength="30" size="10" /><br /><br />
+					<button type="submit" value="Register" class="btn btn-success">Register</button>
+				</form>
+			</div>
+		{% endif %}
+		{% block content %}{% endblock %}
+		<div class="short-block footer"><span class="foot-left">&copy; 2014 Megan Belzner, Designed for MIT's 6.470 Web Programming Competition</span><span class="foot-right">Powered by <a href="http://maps.google.com/">Google Maps</a> and <a href="http://docs.citygridmedia.com/display/citygridv2/Places+API">CityGrid Places</a></span></div>
+	</body>
+</html>
