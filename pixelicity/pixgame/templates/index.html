@@ -26,9 +26,11 @@
 							if (json['item']) {
 								alert("While looking around the building, you found a " + json['item'] + "!");
 								$(".numItem").html(json['numItem']);
+								$(".mayr-box span").html("Mayr says: Remember that you can always check the <a href=\"{% url 'achievements' %}\">achievements page</a> to see your items!");
 							}
 							else {
 								alert("It's just a building, nothing special here. Move along.");
+								$(".mayr-box span").html("Mayr says: These buildings aren't going to build themselves! Stop wandering around like a tourist and get back to work!");
 							}
 						});
 					});
