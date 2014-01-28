@@ -11,7 +11,7 @@ from pixgame.models import *
 from pixgame.achieve import checkAch, parseAch, collectAch
 
 # Create your views here.
-def index(request):
+def home(request):
 	name = ""
 	un = ""
 	locations = []
@@ -42,7 +42,7 @@ def index(request):
 		for char in Character.objects.all():
 			if char.achieve in achievements and char not in userCollect.characters.all():
 				character = char
-		#		userCollect.characters.add(char)
+				userCollect.characters.add(char)
 		numChar = len(userCollect.characters.all())
 		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined, numShop, numChar, numItem]
 	return render(request, 'index.html', {'name': name, 'username': un, 'locations': locations, 'allLocs': allLocs, 'achievements': achievements, 'new': new, 'allAch': allAch, 'stats': stats, 'character': character})
