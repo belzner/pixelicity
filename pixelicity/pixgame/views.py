@@ -22,8 +22,7 @@ def index(request):
 	new = False
 	character = None
 	if request.user.is_authenticated():
-		#name = request.user.first_name
-		name = request.path
+		name = request.user.first_name
 		un = request.user.username
 		userLoc = UserLocs.objects.get(user=request.user)
 		locations = userLoc.locations.all()
@@ -40,11 +39,9 @@ def index(request):
 		userAch = UserAchieve.objects.get(user=request.user)
 		achievements = userAch.achievements.all()
 		allAch = Achievement.objects.all()
-		for char in Character.objects.all():
-			if char.achieve in achievements and char not in userCollect.characters.all():
-				character = char
-				if request.path == "/":
-					userCollect.characters.add(char)
+		for charac in Character.objects.all():
+			if charac.achieve in achievements and charac not in userCollect.characters.all():
+				character = charac
 		numChar = len(userCollect.characters.all())
 		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined, numShop, numChar, numItem]
 	return render(request, 'index.html', {'name': name, 'username': un, 'locations': locations, 'allLocs': allLocs, 'achievements': achievements, 'new': new, 'allAch': allAch, 'stats': stats, 'character': character})
@@ -195,5 +192,19 @@ def searchloc(request):
 					item = False
 				numItem = len(userCollect.items.all())
 				results = {'success': True, 'item': item, 'numItem': numItem}
+	jsonRes = json.dumps(results)
+	return HttpResponse(jsonRes, mimetype='application/json')
+
+def addchar(request):
+	results = {'success': False, 'numChar': 0}
+	if request.user.is_authenticated():
+		if request.method == u'GET':
+			GET = request.GET
+			if GET.has_key(u'character'):
+				character = GET[u'character']
+				userCollect = Collection.objects.get(user=request.user)
+				userCollect.characters.add(Character.objects.get(name=character))
+				numChar = len(userCollect.characters.all())
+				results = {'success': True, 'numChar': numChar}
 	jsonRes = json.dumps(results)
 	return HttpResponse(jsonRes, mimetype='application/json')

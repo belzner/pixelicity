@@ -168,6 +168,11 @@
 				$(".cont").click(function() {
 					$(".info-box").fadeToggle();
 					$(".mayr-box span").html("Mayr says: Check the <a href=\"{% url 'achievements' %}\">achievements page</a> to see all the residents you've met and the items you've found!");
+					$.get("{% url 'addchar' %}", { character: '{{character.name}}' }, function(json) {
+						if (json['success']) {
+							$(".numChar").html(json['numChar']);
+						}
+					});
 				});
 			{% endif %}
 		});

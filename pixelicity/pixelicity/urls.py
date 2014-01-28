@@ -21,7 +21,8 @@ urlpatterns = patterns('',
     url(r'^register', views.userreg, name='register'),
     url(r'^addloc', views.addloc, name='addloc'),
     url(r'^addhome', views.addhome, name='addhome'),
-    url(r'^searchloc', views.searchloc, name='searchloc')
+    url(r'^searchloc', views.searchloc, name='searchloc'),
+    url(r'^addchar', views.addchar, name='addchar')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler404 = views.error
