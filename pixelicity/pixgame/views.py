@@ -11,6 +11,9 @@ from pixgame.models import *
 from pixgame.achieve import checkAch, parseAch, collectAch
 
 # Create your views here.
+def index(request):
+	return redirect('home')
+
 def home(request):
 	name = ""
 	un = ""
