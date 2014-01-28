@@ -20,12 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'p8%nsv&h42oex4r1&m$p-#5&z6=b(s-g1#vv(pjvi1w==!2a$n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-TEMPLATE_DEBUG = True
-
-ALLOWED_HOSTS = []
-
+DEBUG = False
+TEMPLATE_DEBUG = False
 
 # Application definition
 
@@ -93,7 +89,7 @@ ALLOWED_HOSTS = ['*']
 
 DATABASES['default'] = dj_database_url.config()
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-STATIC_ROOT= os.path.join(PROJECT_DIR,'staticfiles/')
+STATIC_ROOT= os.path.join(BASE_DIR,'staticfiles/')
 #STATICFILES_DIRS = (
 #    os.path.join(BASE_DIR, 'static'),
 #)
