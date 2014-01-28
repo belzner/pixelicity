@@ -3,25 +3,71 @@
 
 {% block title %}Pixelicity | Achievements{% endblock %}
 {% block css %}<link rel="stylesheet" type="text/css" href="{% static "achievements.css" %}" />{% endblock %}
+{% if characters %}
+{% block javascript %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		headerHeight = $('.header').height();
+		footerHeight = $('.footer').height();
+		windowHeight = $(window).height();
+		$('.body').css('min-height', windowHeight - headerHeight - footerHeight - 50);
+		$(".chars").hide();
+		$(".achieve-click").click(function() {
+			$(".achieve").show();
+			$(".chars").hide();
+			$(".achieve-click").removeClass('active');
+			$(".chars-click").addClass('active');
+		});
+		$(".chars-click").click(function() {
+			$(".achieve").hide();
+			$(".chars").show();
+			$(".achieve-click").addClass('active');
+			$(".chars-click").removeClass('active');
+		});
+	});
+</script>
+{% endblock %}
+{% endif %}
 
 {% block content %}
 	<div class="body">
 		<div class="about-block one">
-			<h1>Achievements</h1>
-			<table>
-				{% if achievements %}
-					{% for ach in achievements %}
-						<tr><td colspan="2" class="ach-title"><h3>{{ ach.humanName }}</h3></td></tr>
-						<tr><td><img src="{% static ach.image %}" height="80px" /><td class="ach-hint">{{ ach.hint }} ({{ ach.how }})</td></tr>
-					{% endfor %}
-				{% endif %}
-				{% for ach in allAch %}
-					{% if ach not in achievements %}
-						<tr class="nothave"><td colspan="2" class="ach-title"><h3>{{ ach.humanName }}</h3></td></tr>
-						<tr class="nothave"><td><img src="{% static "ach-nothave.png" %}" height="80px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+			{% if characters %}
+				<span class="nav"><span class="achieve-click">Achievements</span> | <span class="chars-click active">Item Collections</span></span>
+			{% endif %}
+			<span class="achieve">
+				<h1>Achievements</h1>
+				<table>
+					{% if achievements %}
+						{% for ach in achievements %}
+							<tr><td colspan="2" class="ach-title"><h3>{{ ach.humanName }}</h3></td></tr>
+							<tr><td><img src="{% static ach.image %}" height="80px" /><td class="ach-hint">{{ ach.hint }} ({{ ach.how }})</td></tr>
+						{% endfor %}
 					{% endif %}
-				{% endfor %}
-			</table>
+					{% for ach in allAch %}
+						{% if ach not in achievements %}
+							<tr class="nothave"><td colspan="2" class="ach-title"><h3>{{ ach.humanName }}</h3></td></tr>
+							<tr class="nothave"><td><img src="{% static "ach-nothave.png" %}" height="80px" /><td class="ach-hint">{{ ach.hint }}</td></tr>
+						{% endif %}
+					{% endfor %}
+				</table>
+			</span>
+			{% if characters %}
+				<span class="chars">
+					<h1>Item Collections</h1>
+					{% for char in characters %}
+						<div class="res-box"><img src="{% static char.name %}-small.png" /><h2>{{ char.name|capfirst }}</h2></div>
+						<table>
+							{% for i in items %}
+								{% if i.character == char %}
+									<tr><td colspan="2" class="ach-title"><h3>{{ i.name|capfirst }}</h3></td></tr>
+									<tr><td class="ach-hint">{{ i.description }}</td><td><img src="{% static i.image %}" height="60px" /></td></tr>
+								{% endif %}
+							{% endfor %}
+						</table>
+					{% endfor %}
+				</span>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

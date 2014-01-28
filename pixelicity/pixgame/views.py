@@ -1,12 +1,13 @@
 #from django.utils import simplejson
 import json
+import random
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from pixgame.models import Locations, UserLocs, UserAchieve, Achievement
+from pixgame.models import *
 from pixgame.achieve import checkAch, parseAch, collectAch
 
 # Create your views here.
@@ -19,24 +20,32 @@ def index(request):
 	allAch = []
 	stats = []
 	new = False
+	character = None
 	if request.user.is_authenticated():
 		name = request.user.first_name
 		un = request.user.username
 		userLoc = UserLocs.objects.get(user=request.user)
 		locations = userLoc.locations.all()
 		allLocs = Locations.objects.all().exclude(locType="residential")
+		userCollect = Collection.objects.get(user=request.user)
 		newAch = []
 		numResi = len(userLoc.locations.filter(locType="residential"))
 		numRest = len(userLoc.locations.filter(locType="restaurant"))
 		numShop = len(userLoc.locations.filter(locType="shopping"))
+		numItem = len(userCollect.items.all())
 		newAch = collectAch(request.user, userLoc)
 		if newAch:
 			new = True
 		userAch = UserAchieve.objects.get(user=request.user)
 		achievements = userAch.achievements.all()
 		allAch = Achievement.objects.all()
-		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined, numShop]
-	return render(request, 'index.html', {'name': name, 'username': un, 'locations': locations, 'allLocs': allLocs, 'achievements': achievements, 'new': new, 'allAch': allAch, 'stats': stats})
+		for char in Character.objects.all():
+			if char.achieve in achievements and char not in userCollect.characters.all():
+				character = char
+				userCollect.characters.add(char)
+		numChar = len(userCollect.characters.all())
+		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined, numShop, numChar, numItem]
+	return render(request, 'index.html', {'name': name, 'username': un, 'locations': locations, 'allLocs': allLocs, 'achievements': achievements, 'new': new, 'allAch': allAch, 'stats': stats, 'character': character})
 
 def about(request):
 	name = ""
@@ -61,7 +70,10 @@ def achievements(request):
 		userAch = UserAchieve.objects.get(user=request.user)
 		achievements = userAch.achievements.all()
 		allAch = Achievement.objects.all()
-		return render(request, 'achievements.html', {'name': name, 'username': un, 'achievements': achievements, 'allAch': allAch})
+		userCollect = Collection.objects.get(user=request.user)
+		characters = userCollect.characters.all()
+		items = userCollect.items.all()
+		return render(request, 'achievements.html', {'name': name, 'username': un, 'achievements': achievements, 'allAch': allAch, 'characters': characters, 'items': items})
 	else:
 		return redirect('index')
 
@@ -96,6 +108,8 @@ def userreg(request):
 		userLoc.save()
 		userAch = UserAchieve(user=user)
 		userAch.save()
+		userCollect = Collection(user=user)
+		userCollect.save()
 		user = authenticate(username=un, password=pw)
 		if user is not None:
 			if user.is_active:
@@ -151,5 +165,33 @@ def addhome(request):
 				#newAch = collectAch(request.user, ul)
 				#results = {'success': True, 'newAch': newAch}
 				results = {'success': True}
+	jsonRes = json.dumps(results)
+	return HttpResponse(jsonRes, mimetype='application/json')
+
+def searchloc(request):
+	results = {'success': False, 'item': False, 'numItem': 0}
+	if request.user.is_authenticated():
+		if request.method == u'GET':
+			GET = request.GET
+			if GET.has_key(u'li'):
+				li = int(GET[u'li'])
+				loc = Locations.objects.get(locId=li)
+				userCollect = Collection.objects.get(user=request.user)
+				chars = userCollect.characters.filter(locType=loc.locType)
+				items = []
+				for c in chars:
+					items.extend(Item.objects.filter(character=c).exclude(name__in=[i.name for i in userCollect.items.all()]))
+				if items:
+					r = random.randrange(1,11)
+					if r > 5:
+						random.shuffle(items)
+						item = items[0].name
+						userCollect.items.add(items[0])
+					else:
+						item = False
+				else:
+					item = False
+				numItem = len(userCollect.items.all())
+				results = {'success': True, 'item': item, 'numItem': numItem}
 	jsonRes = json.dumps(results)
 	return HttpResponse(jsonRes, mimetype='application/json')

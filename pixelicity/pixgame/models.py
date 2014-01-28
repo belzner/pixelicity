@@ -36,3 +36,29 @@ class UserAchieve(models.Model):
 
 	def __unicode__(self):
 		return self.user.username
+
+class Character(models.Model):
+	name = models.CharField(max_length=20)
+	intro = models.TextField()
+	achieve = models.ForeignKey(Achievement)
+	locType = models.CharField(max_length=20)
+
+	def __unicode__(self):
+		return self.name
+
+class Item(models.Model):
+	name = models.CharField(max_length=40)
+	description = models.TextField()
+	image = models.CharField(max_length=40)
+	character = models.ForeignKey(Character)
+
+	def __unicode__(self):
+		return self.name
+
+class Collection(models.Model):
+	user = models.OneToOneField(User)
+	characters = models.ManyToManyField(Character)
+	items = models.ManyToManyField(Item)
+
+	def __unicode__(self):
+		return self.user.username

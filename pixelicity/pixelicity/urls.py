@@ -20,7 +20,8 @@ urlpatterns = patterns('',
     url(r'^logout', views.userlogout, name='logout'),
     url(r'^register', views.userreg, name='register'),
     url(r'^addloc', views.addloc, name='addloc'),
-    url(r'^addhome', views.addhome, name='addhome')
+    url(r'^addhome', views.addhome, name='addhome'),
+    url(r'^searchloc', views.searchloc, name='searchloc')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler404 = views.error

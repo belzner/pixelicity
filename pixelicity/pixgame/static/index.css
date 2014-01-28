@@ -122,6 +122,10 @@
 .stats-content h4 {
 	display: inline;
 }
+.stats-content p {
+	margin: 0px;
+	padding: 0px;
+}
 .stat {
 	margin: 5px;
 	display: inline-block;
@@ -133,9 +137,6 @@
 }
 .foot-right {
 	right: 30px;
-}
-.hidden {
-	display: none;
 }
 .view-all {
 	position: absolute;

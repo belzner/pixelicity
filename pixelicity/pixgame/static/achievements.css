@@ -16,6 +16,7 @@ body {
 	text-align: center;
 	margin-top: 20px;
 	margin-bottom: 20px;
+	min-height: 100%;
 }
 }
 .ach-title {
@@ -39,4 +40,25 @@ table {
 }
 tr {
 	margin: 5px;
+}
+.res-box {
+	width: 150px;
+	margin: 20px auto;
+}
+.res-box h2 {
+	display: inline;
+}
+.res-box img {
+	margin-right: 10px;
+}
+.nav {
+	font-size: 150%;
+}
+.active {
+	color: #226a78;
+	text-decoration: none;
+}
+.active:hover {
+	color: #000000;
+	text-decoration: underline;
 }
