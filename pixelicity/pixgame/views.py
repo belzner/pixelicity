@@ -75,10 +75,10 @@ def achievements(request):
 		items = userCollect.items.all()
 		return render(request, 'achievements.html', {'name': name, 'username': un, 'achievements': achievements, 'allAch': allAch, 'characters': characters, 'items': items})
 	else:
-		return redirect('index')
+		return redirect('home')
 
 def error(request):
-	return redirect('index')
+	return redirect('home')
 
 def userlogin(request):
 	un = request.POST['username']
@@ -87,11 +87,11 @@ def userlogin(request):
 	if user is not None:
 		if user.is_active:
 			login(request, user)
-	return redirect(request.META.get('HTTP_REFERER', 'index'))
+	return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 def userlogout(request):
 	logout(request)
-	return redirect(request.META.get('HTTP_REFERER', 'index'))
+	return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 def userreg(request):
 	un = request.POST['username']
@@ -114,7 +114,7 @@ def userreg(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-		return redirect('index')
+		return redirect('home')
 	else:
 		if not un:
 			messages.error(request, "Please enter a username.")
@@ -122,7 +122,7 @@ def userreg(request):
 			messages.error(request, "Please enter a password.")
 		if not em:
 			messages.error(request, "Please enter an email address.")
-	return redirect(request.META.get('HTTP_REFERER', 'index'))
+	return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
 def addloc(request):
