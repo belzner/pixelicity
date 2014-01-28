@@ -13,9 +13,7 @@
 			$(document).ready(function() {
 				{% if not user.is_authenticated %}
 					$(".login-box").hide();
-					{% if not messages %}
-						$(".reg-box").hide();
-					{% endif %}
+					$(".reg-box").hide();
 					$(".login").click(function() {
 						$(".login-box").fadeToggle();
 						$(".reg-box").hide();
@@ -42,6 +40,19 @@
 		{% if not user.is_authenticated %}
 			<div class="floating-box login-box">
 				<h1>Log In</h1>
+				{% if messages %}
+					{% for message in messages %}
+						{% if message.tags == "info" %}
+							<span class="error">{{ message }}</span><br />
+							<script type="text/javascript">
+								$(document).ready(function() {
+									$(".login-box").show();
+								});
+							</script>
+						{% endif %}
+					{% endfor %}
+					<br />
+				{% endif %}
 				<form action="{% url 'login' %}" method="post">
 					{% csrf_token %}
 					Username: <input type="text" name="username" maxlength="30" /><br /><br />
@@ -53,7 +64,14 @@
 				<h1>Register</h1>
 				{% if messages %}
 					{% for message in messages %}
-						<span class="error">{{ message }}</span><br />
+						{% if message.tags == "error" %}
+							<span class="error">{{ message }}</span><br />
+							<script type="text/javascript">
+								$(document).ready(function() {
+									$(".reg-box").show();
+								});
+							</script>
+						{% endif %}
 					{% endfor %}
 					<br />
 				{% endif %}

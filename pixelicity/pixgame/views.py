@@ -86,6 +86,13 @@ def userlogin(request):
 	if user is not None:
 		if user.is_active:
 			login(request, user)
+	else:
+		if not un:
+			messages.info(request, "Please enter your username.")
+		if not pw:
+			messages.info(request, "Please enter your password.")
+		if un and pw:
+			messages.info(request, "That username and password combination was not found. Please try again.")
 	return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def userlogout(request):
@@ -99,21 +106,24 @@ def userreg(request):
 	fn = request.POST['first']
 	ln = request.POST['last']
 	if un and pw and em:
-		user = User.objects.create_user(un, em, pw)
-		user.first_name = fn
-		user.last_name = ln
-		user.save()
-		userLoc = UserLocs(user=user)
-		userLoc.save()
-		userAch = UserAchieve(user=user)
-		userAch.save()
-		userCollect = Collection(user=user)
-		userCollect.save()
-		user = authenticate(username=un, password=pw)
-		if user is not None:
-			if user.is_active:
-				login(request, user)
-		return redirect('index')
+		if not User.objects.filter(username=un).exists():
+			user = User.objects.create_user(un, em, pw)
+			user.first_name = fn
+			user.last_name = ln
+			user.save()
+			userLoc = UserLocs(user=user)
+			userLoc.save()
+			userAch = UserAchieve(user=user)
+			userAch.save()
+			userCollect = Collection(user=user)
+			userCollect.save()
+			user = authenticate(username=un, password=pw)
+			if user is not None:
+				if user.is_active:
+					login(request, user)
+			return redirect('index')
+		else:
+			messages.error(request, "That username is already taken.")
 	else:
 		if not un:
 			messages.error(request, "Please enter a username.")
