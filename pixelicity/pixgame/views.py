@@ -12,9 +12,6 @@ from pixgame.achieve import checkAch, parseAch, collectAch
 
 # Create your views here.
 def index(request):
-	return redirect('home')
-
-def home(request):
 	name = ""
 	un = ""
 	locations = []
@@ -45,7 +42,8 @@ def home(request):
 		for char in Character.objects.all():
 			if char.achieve in achievements and char not in userCollect.characters.all():
 				character = char
-				userCollect.characters.add(char)
+				if request.path == "":
+					userCollect.characters.add(char)
 		numChar = len(userCollect.characters.all())
 		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined, numShop, numChar, numItem]
 	return render(request, 'index.html', {'name': name, 'username': un, 'locations': locations, 'allLocs': allLocs, 'achievements': achievements, 'new': new, 'allAch': allAch, 'stats': stats, 'character': character})
@@ -78,10 +76,10 @@ def achievements(request):
 		items = userCollect.items.all()
 		return render(request, 'achievements.html', {'name': name, 'username': un, 'achievements': achievements, 'allAch': allAch, 'characters': characters, 'items': items})
 	else:
-		return redirect('home')
+		return redirect('index')
 
 def error(request):
-	return redirect('home')
+	return redirect('index')
 
 def userlogin(request):
 	un = request.POST['username']
@@ -90,11 +88,11 @@ def userlogin(request):
 	if user is not None:
 		if user.is_active:
 			login(request, user)
-	return redirect(request.META.get('HTTP_REFERER', 'home'))
+	return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def userlogout(request):
 	logout(request)
-	return redirect(request.META.get('HTTP_REFERER', 'home'))
+	return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def userreg(request):
 	un = request.POST['username']
@@ -117,7 +115,7 @@ def userreg(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-		return redirect('home')
+		return redirect('index')
 	else:
 		if not un:
 			messages.error(request, "Please enter a username.")
@@ -125,7 +123,7 @@ def userreg(request):
 			messages.error(request, "Please enter a password.")
 		if not em:
 			messages.error(request, "Please enter an email address.")
-	return redirect(request.META.get('HTTP_REFERER', 'home'))
+	return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 
 def addloc(request):
