@@ -42,7 +42,7 @@ def index(request):
 		for char in Character.objects.all():
 			if char.achieve in achievements and char not in userCollect.characters.all():
 				character = char
-				if request.path == "":
+				if request.path == "/":
 					userCollect.characters.add(char)
 		numChar = len(userCollect.characters.all())
 		stats = [len(locations), numResi, numRest, len(achievements), request.user.date_joined, numShop, numChar, numItem]
