@@ -140,7 +140,7 @@
 }
 .view-all {
 	position: absolute;
-	bottom: 0px;
 	right: 0px;
 	font-size: smaller;
+	margin-top: 10px;
 }
