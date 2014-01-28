@@ -96,5 +96,5 @@ DATABASES['default'] = dj_database_url.config()
 #STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
     #os.path.join(BASE_DIR, 'pixgame/static'),
-    'pixelicity/pixgame/static/',
+    '/pixelicity/pixgame/static/',
 )
